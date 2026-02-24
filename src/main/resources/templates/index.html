@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Simple Notepad</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark");
+        }
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <h1>My Notepad</h1>
+
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+    <form th:if="${editId == null}" th:action="@{/save}" method="post">
+        <textarea name="content" th:value="${note.content}" placeholder="Write your note..."></textarea>
+        <button type="submit">Save</button>
+    </form>
+
+    <form th:if="${editId != null}" th:action="@{'/update/' + ${editId}}" method="post">
+        <textarea name="content" th:text="${note.content}"></textarea>
+        <button type="submit">Update</button>
+    </form>
+
+    <div class="notes">
+        <h2>Saved Notes</h2>
+        <div th:each="note, iterStat : ${notes}" class="note">
+            <p th:text="${note.content}"></p>
+            <a th:href="@{'/edit/' + ${iterStat.index}}">Edit</a>
+            <a th:href="@{'/delete/' + ${iterStat.index}}">Delete</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
